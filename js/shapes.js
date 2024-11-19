@@ -5,10 +5,10 @@ class Triangle {
             0.0, 0.5, 0.0,
             0.7, 0.0, 0.0,
         ]);
-        this.colors = new Float32Array([
-            1.0, 0.0, 0.0,
-            0.0, 1.0, 0.0,
-            0.0, 0.0, 1.0,
+        this.colors = new Uint8Array([
+            255, 0, 0,
+            0, 255, 0,
+            0, 0, 255,
         ]);
     }
     getPositions() { return this.positions; }

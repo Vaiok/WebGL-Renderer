@@ -17,7 +17,7 @@ const renderWebGL = ({
     gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(colorAttributeLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    gl.vertexAttribPointer(colorAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(colorAttributeLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
 };
 
