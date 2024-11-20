@@ -39,8 +39,8 @@ class Mat4 {
         return [
             2 / (r - l), 0, 0, 0,
             0, 2 / (t - b), 0, 0,
-            0, 0, -2 / (f - n), 0,
-            -(r + l) / (r - l), -(t + b) / (t - b), -(f + n) / (f - n), 1
+            0, 0, 2 / (f - n), 0,
+            (r + l) / (l - r), (t + b) / (b - t), (f + n) / (n - f), 1
         ];
     }
     static translate(tx, ty, tz) {

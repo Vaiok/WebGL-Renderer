@@ -9,7 +9,9 @@ const renderWebGL = ({ gl, program, transformUniformLocation, positionAttributeL
     if (!transformUniformLocation) {
         throw new Error('Transform uniform location is null');
     }
-    let transform = Mat4.multMat4(Mat4.identity(), Mat4.translate(0, 0, 0));
+    const bigger = Math.max(gl.canvas.width, gl.canvas.height) / 2;
+    const ortho = Mat4.ortho(-bigger, bigger, -bigger, bigger, -1000, 1000);
+    let transform = Mat4.multMat4(ortho, Mat4.translate(0, 0, 0));
     transform = Mat4.multMat4(transform, Mat4.rotateX(0));
     transform = Mat4.multMat4(transform, Mat4.rotateZ(0));
     transform = Mat4.multMat4(transform, Mat4.rotateY(0));

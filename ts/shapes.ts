@@ -3,9 +3,9 @@ class Triangle {
     private colors: Uint8Array;
     constructor() {
         this.positions = new Float32Array([
-            0, 0.5, 0,
-            -0.5, -0.5, 0,
-            0.5, -0.5, 0,
+            0, 50, 0,
+            -50, -50, 0,
+            50, -50, 0,
         ]);
         this.colors = new Uint8Array([
             255, 0, 0,

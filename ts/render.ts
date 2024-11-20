@@ -13,13 +13,13 @@ const renderWebGL = ({
     if (!positionBuffer) { throw new Error('Position buffer is null'); }
     if (!colorBuffer) { throw new Error('Color buffer is null'); }
     if (!transformUniformLocation) { throw new Error('Transform uniform location is null'); }
-    //const ortho = Mat4.ortho(0, gl.canvas.width, gl.canvas.height, 0, -1000, 1000);
-    let transform = Mat4.multMat4(Mat4.identity(), Mat4.translate(0, 0, 0));
+    const bigger = Math.max(gl.canvas.width, gl.canvas.height) / 2;
+    const ortho = Mat4.ortho(-bigger, bigger, -bigger, bigger, -1000, 1000);
+    let transform = Mat4.multMat4(ortho, Mat4.translate(0, 0, 0));
     transform = Mat4.multMat4(transform, Mat4.rotateX(0));
     transform = Mat4.multMat4(transform, Mat4.rotateZ(0));
     transform = Mat4.multMat4(transform, Mat4.rotateY(0));
     transform = Mat4.multMat4(transform, Mat4.scale(1, 1, 1));
-    //transform = Mat4.multMat4(transform, Mat4.translate(1, -1, 0));
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.useProgram(program);
