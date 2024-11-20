@@ -13,8 +13,8 @@ class Triangle {
             0, 0, 255,
         ]);
     }
-    public getPositions() { return this.positions }
-    public getColors() { return this.colors }
+    public getPositions(): Float32Array { return this.positions }
+    public getColors(): Uint8Array { return this.colors }
 }
 
 export { Triangle };

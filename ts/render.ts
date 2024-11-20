@@ -1,15 +1,11 @@
+import { WebGLData } from "./setup.js";
 import { Mat4 } from "./matrixMath.js";
 
 const renderWebGL = ({
     gl, program, transformUniformLocation,
     positionAttributeLocation, colorAttributeLocation,
     positionBuffer, colorBuffer
-}: {
-    gl: WebGLRenderingContext, program: WebGLProgram,
-    transformUniformLocation: WebGLUniformLocation | null,
-    positionAttributeLocation: number, colorAttributeLocation: number,
-    positionBuffer: WebGLBuffer | null, colorBuffer: WebGLBuffer | null
-}) => {
+}: WebGLData): void => {
     if (!positionBuffer) { throw new Error('Position buffer is null'); }
     if (!colorBuffer) { throw new Error('Color buffer is null'); }
     if (!transformUniformLocation) { throw new Error('Transform uniform location is null'); }

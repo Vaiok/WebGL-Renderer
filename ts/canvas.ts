@@ -3,7 +3,7 @@ const createCanvas = (): HTMLCanvasElement => {
     document.body.appendChild(canvas);
     return canvas;
 };
-const resizeCanvas = (canvas: HTMLCanvasElement, gl: WebGLRenderingContext) => {
+const resizeCanvas = (canvas: HTMLCanvasElement, gl: WebGLRenderingContext): void => {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
     const bigger = Math.max(canvas.width, canvas.height);

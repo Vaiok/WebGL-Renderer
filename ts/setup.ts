@@ -1,6 +1,16 @@
 import { vertexShaderSource, fragmentShaderSource } from './shaders.js';
 import { Triangle } from './shapes.js';
 
+interface WebGLData {
+    gl: WebGLRenderingContext,
+    program: WebGLProgram,
+    transformUniformLocation: WebGLUniformLocation | null,
+    positionAttributeLocation: number,
+    colorAttributeLocation: number,
+    positionBuffer: WebGLBuffer | null,
+    colorBuffer: WebGLBuffer | null
+}
+
 const createShader = (
     gl: WebGLRenderingContext, type: number, source: string
 ): WebGLShader => {
@@ -32,7 +42,7 @@ const createProgram = (
     return program;
 };
 
-const setupWebGL = (canvas: HTMLCanvasElement) => {
+const setupWebGL = (canvas: HTMLCanvasElement): WebGLData => {
     const gl = canvas.getContext('webgl');
     if (!gl) { throw new Error('WebGL not supported'); }
     const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
@@ -55,4 +65,4 @@ const setupWebGL = (canvas: HTMLCanvasElement) => {
     };
 }
 
-export { setupWebGL };
+export { setupWebGL, WebGLData };
