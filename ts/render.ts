@@ -10,6 +10,7 @@ const renderWebGL = ({
     if (!colorBuffer) { throw new Error('Color buffer is null'); }
     if (!transformUniformLocation) { throw new Error('Transform uniform location is null'); }
     gl.enable(gl.CULL_FACE);
+    gl.enable(gl.DEPTH_TEST);
     const bigger = Math.max(gl.canvas.width, gl.canvas.height) / 2;
     const ortho = Mat4.ortho(-bigger, bigger, -bigger, bigger, -bigger, bigger);
     let transform = Mat4.multMat4(ortho, Mat4.translate(0.5, 0.5, 0.5));
@@ -18,7 +19,7 @@ const renderWebGL = ({
     transform = Mat4.multMat4(transform, Mat4.rotateY(Math.PI / 4));
     transform = Mat4.multMat4(transform, Mat4.scale(0.5, 0.5, 0.5));
     gl.clearColor(0, 0, 0, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.useProgram(program);
     gl.uniformMatrix4fv(transformUniformLocation, false, transform);
     gl.enableVertexAttribArray(positionAttributeLocation);
