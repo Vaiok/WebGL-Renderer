@@ -53,7 +53,7 @@ const setupWebGL = (canvas: HTMLCanvasElement): WebGLData => {
     const colorAttributeLocation = gl.getAttribLocation(program, 'a_color');
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    const rectangle = new Rectangle(300, 300, 'green');
+    const rectangle = new Rectangle(300, 300, [0, 255, 0]);
     gl.bufferData(gl.ARRAY_BUFFER, rectangle.getPositions(), gl.STATIC_DRAW);
     const colorBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);

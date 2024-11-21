@@ -7,16 +7,16 @@ const colorMap: { [key: string]: number[] } = {
 class Triangle {
     private positions: Float32Array;
     private colors: Uint8Array;
-    constructor(width: number, height: number, color: string = 'red') {
+    constructor(width: number, height: number, color: number[]) {
         this.positions = new Float32Array([
             0, height/2, 0,
             -width/2, -height/2, 0,
             width/2, -height/2, 0,
         ]);
         this.colors = new Uint8Array([
-            ...colorMap[color],
-            ...colorMap[color],
-            ...colorMap[color],
+            ...color,
+            ...color,
+            ...color,
         ]);
     }
     public getPositions(): Float32Array { return this.positions }
@@ -26,7 +26,7 @@ class Triangle {
 class Rectangle {
     private positions: Float32Array;
     private colors: Uint8Array;
-    constructor(width: number, height: number, color: string = 'red') {
+    constructor(width: number, height: number, color: number[]) {
         this.positions = new Float32Array([
             -width/2, height/2,  0,
             -width/2, -height/2, 0,
@@ -36,12 +36,12 @@ class Rectangle {
             width/2,  height/2,  0,
         ]);
         this.colors = new Uint8Array([
-            ...colorMap[color],
-            ...colorMap[color],
-            ...colorMap[color],
-            ...colorMap[color],
-            ...colorMap[color],
-            ...colorMap[color],
+            ...color,
+            ...color,
+            ...color,
+            ...color,
+            ...color,
+            ...color,
         ]);
     }
     public getPositions(): Float32Array { return this.positions }
