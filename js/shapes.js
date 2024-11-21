@@ -1,8 +1,3 @@
-const colorMap = {
-    'red': [255, 0, 0],
-    'green': [0, 255, 0],
-    'blue': [0, 0, 255],
-};
 class Triangle {
     constructor(width, height, color) {
         this.positions = new Float32Array([
