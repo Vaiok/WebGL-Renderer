@@ -1,9 +1,10 @@
 class Triangle {
     constructor(width, height, color) {
+        const w = width / 2, h = height / 2;
         this.positions = new Float32Array([
-            0, height / 2, 0,
-            -width / 2, -height / 2, 0,
-            width / 2, -height / 2, 0,
+            0, h, 0,
+            -w, -h, 0,
+            w, -h, 0,
         ]);
         this.colors = new Uint8Array([
             ...color,
@@ -14,26 +15,39 @@ class Triangle {
     getPositions() { return this.positions; }
     getColors() { return this.colors; }
 }
-class Rectangle {
-    constructor(width, height, color) {
+class Cube {
+    constructor(width, height, depth, colors) {
+        const w = width / 2, h = height / 2, d = depth / 2;
         this.positions = new Float32Array([
-            -width / 2, height / 2, 0,
-            -width / 2, -height / 2, 0,
-            width / 2, height / 2, 0,
-            -width / 2, -height / 2, 0,
-            width / 2, -height / 2, 0,
-            width / 2, height / 2, 0,
+            -w, h, -d, -w, -h, -d, w, h, -d,
+            -w, -h, -d, w, -h, -d, w, h, -d,
+            -w, h, d, w, h, d, -w, -h, d,
+            w, h, d, w, -h, d, -w, -h, d,
+            -w, h, -d, w, h, -d, -w, h, d,
+            w, h, -d, w, h, d, -w, h, d,
+            -w, -h, -d, -w, -h, d, w, -h, -d,
+            -w, -h, d, w, -h, d, w, -h, -d,
+            w, h, -d, w, -h, -d, w, h, d,
+            w, -h, -d, w, -h, d, w, h, d,
+            -w, h, -d, -w, h, d, -w, -h, -d,
+            -w, h, d, -w, -h, d, -w, -h, -d,
         ]);
         this.colors = new Uint8Array([
-            ...color,
-            ...color,
-            ...color,
-            ...color,
-            ...color,
-            ...color,
+            ...colors[0], ...colors[0], ...colors[0],
+            ...colors[0], ...colors[0], ...colors[0],
+            ...colors[1], ...colors[1], ...colors[1],
+            ...colors[1], ...colors[1], ...colors[1],
+            ...colors[2], ...colors[2], ...colors[2],
+            ...colors[2], ...colors[2], ...colors[2],
+            ...colors[3], ...colors[3], ...colors[3],
+            ...colors[3], ...colors[3], ...colors[3],
+            ...colors[4], ...colors[4], ...colors[4],
+            ...colors[4], ...colors[4], ...colors[4],
+            ...colors[5], ...colors[5], ...colors[5],
+            ...colors[5], ...colors[5], ...colors[5],
         ]);
     }
     getPositions() { return this.positions; }
     getColors() { return this.colors; }
 }
-export { Triangle, Rectangle };
+export { Triangle, Cube };

@@ -1,5 +1,5 @@
 import { vertexShaderSource, fragmentShaderSource } from './shaders.js';
-import { Rectangle } from './shapes.js';
+import { Cube } from './shapes.js';
 const createShader = (gl, type, source) => {
     const shader = gl.createShader(type);
     if (!shader) {
@@ -42,7 +42,9 @@ const setupWebGL = (canvas) => {
     const colorAttributeLocation = gl.getAttribLocation(program, 'a_color');
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    const rectangle = new Rectangle(300, 300, [0, 255, 0]);
+    const rectangle = new Cube(300, 300, 300, [
+        [255, 0, 0], [0, 255, 255], [0, 255, 0], [255, 0, 255], [0, 0, 255], [255, 255, 0]
+    ]);
     gl.bufferData(gl.ARRAY_BUFFER, rectangle.getPositions(), gl.STATIC_DRAW);
     const colorBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
