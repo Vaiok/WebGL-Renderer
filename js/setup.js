@@ -1,5 +1,5 @@
 import { vertexShaderSource, fragmentShaderSource } from './shaders.js';
-import { Triangle } from './shapes.js';
+import { Rectangle } from './shapes.js';
 const createShader = (gl, type, source) => {
     const shader = gl.createShader(type);
     if (!shader) {
@@ -42,11 +42,11 @@ const setupWebGL = (canvas) => {
     const colorAttributeLocation = gl.getAttribLocation(program, 'a_color');
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    const triangle = new Triangle();
-    gl.bufferData(gl.ARRAY_BUFFER, triangle.getPositions(), gl.STATIC_DRAW);
+    const rectangle = new Rectangle(300, 300, 'green');
+    gl.bufferData(gl.ARRAY_BUFFER, rectangle.getPositions(), gl.STATIC_DRAW);
     const colorBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, triangle.getColors(), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, rectangle.getColors(), gl.STATIC_DRAW);
     return {
         gl, program, transformUniformLocation,
         positionAttributeLocation, colorAttributeLocation,

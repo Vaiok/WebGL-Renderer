@@ -10,7 +10,7 @@ const renderWebGL = ({
     if (!colorBuffer) { throw new Error('Color buffer is null'); }
     if (!transformUniformLocation) { throw new Error('Transform uniform location is null'); }
     const bigger = Math.max(gl.canvas.width, gl.canvas.height) / 2;
-    const ortho = Mat4.ortho(-bigger, bigger, -bigger, bigger, -1000, 1000);
+    const ortho = Mat4.ortho(-bigger, bigger, -bigger, bigger, -bigger, bigger);
     let transform = Mat4.multMat4(ortho, Mat4.translate(0, 0, 0));
     transform = Mat4.multMat4(transform, Mat4.rotateX(0));
     transform = Mat4.multMat4(transform, Mat4.rotateZ(0));
@@ -26,7 +26,7 @@ const renderWebGL = ({
     gl.enableVertexAttribArray(colorAttributeLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.vertexAttribPointer(colorAttributeLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
 };
 
 export { renderWebGL };
