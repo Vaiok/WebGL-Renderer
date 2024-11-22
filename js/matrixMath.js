@@ -49,8 +49,8 @@ class Mat4 {
         return [
             f, 0, 0, 0,
             0, f, 0, 0,
-            0, 0, (far + near) * nf, -1,
-            0, 0, (2 * far * near) * nf, 0
+            0, 0, (far + near) * nf, 1,
+            0, 0, -(2 * far * near) * nf, 0
         ];
     }
     static translate(tx, ty, tz) {
