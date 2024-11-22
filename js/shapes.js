@@ -27,18 +27,18 @@ class Cube {
         const fbl = [x - w, y - h, z + d];
         const fbr = [x + w, y - h, z + d];
         this.positions = new Float32Array([
-            ...ntl, ...nbl, ...ntr,
-            ...nbl, ...nbr, ...ntr,
-            ...ftl, ...ftr, ...fbl,
-            ...ftr, ...fbr, ...fbl,
-            ...ntl, ...ntr, ...ftl,
-            ...ntr, ...ftr, ...ftl,
-            ...nbl, ...fbl, ...nbr,
-            ...fbl, ...fbr, ...nbr,
-            ...ntr, ...nbr, ...ftr,
-            ...nbr, ...fbr, ...ftr,
-            ...ntl, ...ftl, ...nbl,
-            ...ftl, ...fbl, ...nbl,
+            ...ntl, ...ntr, ...nbl,
+            ...nbl, ...ntr, ...nbr,
+            ...ftl, ...fbl, ...ftr,
+            ...ftr, ...fbl, ...fbr,
+            ...ntl, ...ftl, ...ntr,
+            ...ntr, ...ftl, ...ftr,
+            ...nbl, ...nbr, ...fbl,
+            ...fbl, ...nbr, ...fbr,
+            ...ntr, ...ftr, ...nbr,
+            ...nbr, ...ftr, ...fbr,
+            ...ntl, ...nbl, ...ftl,
+            ...ftl, ...nbl, ...fbl,
         ]);
         this.colors = new Uint8Array([
             ...colors[0], ...colors[0], ...colors[0],

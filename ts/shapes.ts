@@ -37,23 +37,23 @@ class Cube {
         const fbr = [x+w, y-h, z+d];
         this.positions = new Float32Array([
             // Front face
-            ...ntl, ...nbl, ...ntr,
-            ...nbl, ...nbr, ...ntr,
+            ...ntl, ...ntr, ...nbl,
+            ...nbl, ...ntr, ...nbr,
             // Back face
-            ...ftl, ...ftr, ...fbl,
-            ...ftr, ...fbr, ...fbl,
+            ...ftl, ...fbl, ...ftr,
+            ...ftr, ...fbl, ...fbr,
             // Top face
-            ...ntl, ...ntr, ...ftl,
-            ...ntr, ...ftr, ...ftl, 
+            ...ntl, ...ftl, ...ntr,
+            ...ntr, ...ftl, ...ftr, 
             // Bottom face
-            ...nbl, ...fbl, ...nbr,
-            ...fbl, ...fbr, ...nbr,
+            ...nbl, ...nbr, ...fbl,
+            ...fbl, ...nbr, ...fbr,
             // Right face
-            ...ntr, ...nbr, ...ftr,
-            ...nbr, ...fbr, ...ftr,
+            ...ntr, ...ftr, ...nbr,
+            ...nbr, ...ftr, ...fbr,
             // Left face
-            ...ntl, ...ftl, ...nbl,
-            ...ftl, ...fbl, ...nbl,
+            ...ntl, ...nbl, ...ftl,
+            ...ftl, ...nbl, ...fbl,
         ]);
         this.colors = new Uint8Array([
             // Front face

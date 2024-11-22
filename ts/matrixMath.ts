@@ -52,10 +52,10 @@ class Mat4 {
         const f = 1.0 / Math.tan(fov / 2);
         const nf = 1 / (near - far);
         return [
-            f, 0, 0,                0,
-            0, f, 0,                0,
-            0, 0, (far+near)*nf,    1,
-            0, 0, -(2*far*near)*nf, 0
+            f, 0, 0,               0,
+            0, f, 0,               0,
+            0, 0, (far+near)*nf,  -1,
+            0, 0, (2*far*near)*nf, 0
         ];
     }
 

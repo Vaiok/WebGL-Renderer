@@ -15,7 +15,7 @@ const renderWebGL = (glData: WebGLData, rotation: number[]): void => {
     let transform = Mat4.rotateY(rotation[0]);
     transform = Mat4.multMat4(transform, Mat4.rotateZ(rotation[0]));
     transform = Mat4.multMat4(transform, Mat4.rotateX(rotation[0]));
-    transform = Mat4.multMat4(transform, Mat4.translate(0, 0, rotation[0] * 100));
+    transform = Mat4.multMat4(transform, Mat4.translate(0, 0, rotation[0] * -100));
     transform = Mat4.multMat4(transform, camera);
     transform = Mat4.multMat4(transform, Mat4.rotateX(0));
     transform = Mat4.multMat4(transform, Mat4.rotateZ(0));
@@ -32,7 +32,7 @@ const renderWebGL = (glData: WebGLData, rotation: number[]): void => {
     gl.enableVertexAttribArray(colorAttributeLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.vertexAttribPointer(colorAttributeLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
-    gl.drawArrays(gl.TRIANGLES, 0, 6 * 6);
+    gl.drawArrays(gl.TRIANGLES, 0, 6 * 7);
 
     requestAnimationFrame(() => renderWebGL(glData, rotation));
 };
