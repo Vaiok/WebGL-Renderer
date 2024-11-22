@@ -43,6 +43,16 @@ class Mat4 {
             (r + l) / (l - r), (t + b) / (b - t), (f + n) / (n - f), 1
         ];
     }
+    static perspective(fov, near, far) {
+        const f = 1.0 / Math.tan(fov / 2);
+        const nf = 1 / (near - far);
+        return [
+            f, 0, 0, 0,
+            0, f, 0, 0,
+            0, 0, (far + near) * nf, -1,
+            0, 0, (2 * far * near) * nf, 0
+        ];
+    }
     static translate(tx, ty, tz) {
         return [
             1, 0, 0, 0,

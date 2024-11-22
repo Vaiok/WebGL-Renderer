@@ -21,27 +21,39 @@ class Triangle {
 class Cube {
     private positions: Float32Array;
     private colors: Uint8Array;
-    constructor(width: number, height: number, depth: number, colors: number[][]) {
+    constructor(
+        x: number, y: number, z: number,
+        width: number, height: number, depth: number,
+        colors: number[][]
+    ) {
         const w = width/2, h = height/2, d = depth/2;
+        const ntl = [x-w, y+h, z-d];
+        const ntr = [x+w, y+h, z-d];
+        const nbl = [x-w, y-h, z-d];
+        const nbr = [x+w, y-h, z-d];
+        const ftl = [x-w, y+h, z+d];
+        const ftr = [x+w, y+h, z+d];
+        const fbl = [x-w, y-h, z+d];
+        const fbr = [x+w, y-h, z+d];
         this.positions = new Float32Array([
             // Front face
-            -w,  h, -d, -w, -h, -d,  w,  h, -d,
-            -w, -h, -d,  w, -h, -d,  w,  h, -d,
+            ...ntl, ...ntr, ...nbl,
+            ...nbl, ...ntr, ...nbr,
             // Back face
-            -w,  h,  d,  w,  h,  d, -w, -h,  d,
-             w,  h,  d,  w, -h,  d, -w, -h,  d,
+            ...ftl, ...fbl, ...ftr,
+            ...ftr, ...fbl, ...fbr,
             // Top face
-            -w,  h, -d,  w,  h, -d, -w,  h,  d,
-             w,  h, -d,  w,  h,  d, -w,  h,  d,
+            ...ntl, ...ftl, ...ntr,
+            ...ntr, ...ftl, ...ftr,
             // Bottom face
-            -w, -h, -d, -w, -h,  d,  w, -h, -d,
-            -w, -h,  d,  w, -h,  d,  w, -h, -d,
+            ...nbl, ...nbr, ...fbl,
+            ...fbl, ...nbr, ...fbr,
             // Right face
-             w,  h, -d,  w, -h, -d,  w,  h,  d,
-             w, -h, -d,  w, -h,  d,  w,  h,  d,
+            ...ntr, ...ftr, ...nbr,
+            ...nbr, ...ftr, ...fbr,
             // Left face
-            -w,  h, -d, -w,  h,  d, -w, -h, -d,
-            -w,  h,  d, -w, -h,  d, -w, -h, -d,
+            ...ntl, ...nbl, ...ftl,
+            ...ftl, ...nbl, ...fbl,
         ]);
         this.colors = new Uint8Array([
             // Front face

@@ -5,8 +5,8 @@ import { renderWebGL } from './render.js';
 const canvas = createCanvas();
 const glData = setupWebGL(canvas);
 resizeCanvas(canvas, glData.gl);
-renderWebGL(glData);
+const rotation = [0];
+requestAnimationFrame(() => renderWebGL(glData, rotation));
 window.addEventListener('resize', () => {
     resizeCanvas(canvas, glData.gl);
-    renderWebGL(glData);
 });
