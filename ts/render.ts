@@ -32,7 +32,7 @@ const renderWebGL = (glData: WebGLData, rotation: number[]): void => {
     gl.enableVertexAttribArray(colorAttributeLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.vertexAttribPointer(colorAttributeLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
-    gl.drawArrays(gl.TRIANGLES, 0, 6 * 7);
+    gl.drawArrays(gl.TRIANGLES, 0, 6 * 6);
 
     requestAnimationFrame(() => renderWebGL(glData, rotation));
 };
