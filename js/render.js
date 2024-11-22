@@ -18,7 +18,7 @@ const renderWebGL = (glData, rotation) => {
     let transform = Mat4.rotateY(rotation[0]);
     transform = Mat4.multMat4(transform, Mat4.rotateZ(rotation[0]));
     transform = Mat4.multMat4(transform, Mat4.rotateX(rotation[0]));
-    transform = Mat4.multMat4(transform, Mat4.translate(0, 0, rotation[0] * -100));
+    transform = Mat4.multMat4(transform, Mat4.translate(0, 0, rotation[0] * 100));
     transform = Mat4.multMat4(transform, camera);
     transform = Mat4.multMat4(transform, Mat4.rotateX(0));
     transform = Mat4.multMat4(transform, Mat4.rotateZ(0));

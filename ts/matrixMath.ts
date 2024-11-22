@@ -50,12 +50,12 @@ class Mat4 {
 
     static perspective(fov: number, near: number, far: number): number[] {
         const f = 1.0 / Math.tan(fov / 2);
-        const nf = 1 / (near - far);
+        const nf = 1 / (far - near);
         return [
-            f, 0, 0,               0,
-            0, f, 0,               0,
-            0, 0, (far+near)*nf,  -1,
-            0, 0, (2*far*near)*nf, 0
+            f, 0, 0,                0,
+            0, f, 0,                0,
+            0, 0, (far+near)*nf,    1,
+            0, 0, -(2*far*near)*nf, 0
         ];
     }
 
