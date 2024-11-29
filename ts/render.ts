@@ -1,5 +1,5 @@
 import { WebGLData } from "./setup.js";
-import { Mat4 } from "./matrixMath.js";
+import { Vec3, Mat4 } from "./matrixMath.js";
 
 const renderWebGL = (glData: WebGLData, rotation: number[]): void => {
     const { gl, program, transformUniformLocation, positionAttributeLocation, colorAttributeLocation, positionBuffer, colorBuffer } = glData;
@@ -11,17 +11,13 @@ const renderWebGL = (glData: WebGLData, rotation: number[]): void => {
 
     rotation[0] += 0.01;
     const bigger = Math.max(gl.canvas.width, gl.canvas.height);
-    const camera = Mat4.perspective(Math.PI / 4, 1, bigger);
-    let transform = Mat4.rotateY(rotation[0]);
-    transform = Mat4.multMat4(transform, Mat4.rotateZ(rotation[0]));
-    transform = Mat4.multMat4(transform, Mat4.rotateX(rotation[0]));
-    transform = Mat4.multMat4(transform, Mat4.translate(0, 0, rotation[0] * 100));
-    transform = Mat4.multMat4(transform, camera);
-    transform = Mat4.multMat4(transform, Mat4.rotateX(0));
-    transform = Mat4.multMat4(transform, Mat4.rotateZ(0));
-    transform = Mat4.multMat4(transform, Mat4.rotateY(0));
-    transform = Mat4.multMat4(transform, Mat4.scale(1, 1, 1));
-    transform = Mat4.multMat4(transform, Mat4.translate(0, 0, 0));
+    const camera = Mat4.perspective(Math.PI / 4, 1, bigger * 5);
+    let transform = Mat4.lookAt([0, 0, -bigger/2], [0, 0, 0], [0, 1, 0]);
+    transform = Mat4.inverse(transform);
+    transform = Mat4.multMat(transform, Mat4.rotateY(rotation[0]));
+    transform = Mat4.multMat(transform, Mat4.rotateX(rotation[0]));
+    transform = Mat4.multMat(transform, Mat4.rotateZ(rotation[0]));
+    transform = Mat4.multMat(camera, transform);
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.useProgram(program);
