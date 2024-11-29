@@ -16,7 +16,7 @@ class Triangle {
     getColors() { return this.colors; }
 }
 class Cube {
-    constructor(x, y, z, width, height, depth, colors) {
+    constructor(x, y, z, width, height, depth, colors, normals) {
         const w = width / 2, h = height / 2, d = depth / 2;
         const ntl = [x - w, y + h, z - d];
         const ntr = [x + w, y + h, z - d];
@@ -31,14 +31,14 @@ class Cube {
             ...nbl, ...nbr, ...ntr,
             ...ftl, ...ftr, ...fbl,
             ...ftr, ...fbr, ...fbl,
-            ...ntl, ...ntr, ...ftl,
-            ...ntr, ...ftr, ...ftl,
             ...nbl, ...fbl, ...nbr,
             ...fbl, ...fbr, ...nbr,
-            ...ntr, ...nbr, ...ftr,
-            ...nbr, ...fbr, ...ftr,
+            ...ntl, ...ntr, ...ftl,
+            ...ntr, ...ftr, ...ftl,
             ...ntl, ...ftl, ...nbl,
             ...ftl, ...fbl, ...nbl,
+            ...ntr, ...nbr, ...ftr,
+            ...nbr, ...fbr, ...ftr,
         ]);
         this.colors = new Uint8Array([
             ...colors[0], ...colors[0], ...colors[0],
@@ -54,8 +54,23 @@ class Cube {
             ...colors[5], ...colors[5], ...colors[5],
             ...colors[5], ...colors[5], ...colors[5],
         ]);
+        this.normals = new Float32Array([
+            ...normals[0], ...normals[0], ...normals[0],
+            ...normals[0], ...normals[0], ...normals[0],
+            ...normals[1], ...normals[1], ...normals[1],
+            ...normals[1], ...normals[1], ...normals[1],
+            ...normals[2], ...normals[2], ...normals[2],
+            ...normals[2], ...normals[2], ...normals[2],
+            ...normals[3], ...normals[3], ...normals[3],
+            ...normals[3], ...normals[3], ...normals[3],
+            ...normals[4], ...normals[4], ...normals[4],
+            ...normals[4], ...normals[4], ...normals[4],
+            ...normals[5], ...normals[5], ...normals[5],
+            ...normals[5], ...normals[5], ...normals[5],
+        ]);
     }
     getPositions() { return this.positions; }
     getColors() { return this.colors; }
+    getNormals() { return this.normals; }
 }
 export { Triangle, Cube };

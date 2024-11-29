@@ -37,24 +37,35 @@ const setupWebGL = (canvas) => {
     const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
     const program = createProgram(gl, vertexShader, fragmentShader);
-    const transformUniformLocation = gl.getUniformLocation(program, 'u_transform');
-    const positionAttributeLocation = gl.getAttribLocation(program, 'a_position');
-    const colorAttributeLocation = gl.getAttribLocation(program, 'a_color');
+    const viewUnifLoc = gl.getUniformLocation(program, 'u_view');
+    const invTransUnifLoc = gl.getUniformLocation(program, 'u_inverseTranspose');
+    const lightDirUnifLoc = gl.getUniformLocation(program, 'u_revLightDir');
+    const positionAttrLoc = gl.getAttribLocation(program, 'a_position');
+    const colorAttrLoc = gl.getAttribLocation(program, 'a_color');
+    const normalAttrLoc = gl.getAttribLocation(program, 'a_normal');
+    const rectangle = new Cube(0, 0, 0, 100, 100, 100, [
+        [0, 255, 255], [255, 0, 0],
+        [255, 0, 255], [0, 255, 0],
+        [255, 255, 0], [0, 0, 255],
+    ], [
+        [0, 0, -1], [0, 0, 1],
+        [0, -1, 0], [0, 1, 0],
+        [-1, 0, 0], [1, 0, 0]
+    ]);
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    const rectangle = new Cube(0, 0, 0, 100, 100, 100, [
-        [255, 0, 0], [0, 255, 255],
-        [0, 255, 0], [255, 0, 255],
-        [0, 0, 255], [255, 255, 0]
-    ]);
     gl.bufferData(gl.ARRAY_BUFFER, rectangle.getPositions(), gl.STATIC_DRAW);
     const colorBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, rectangle.getColors(), gl.STATIC_DRAW);
+    const normalBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, rectangle.getNormals(), gl.STATIC_DRAW);
     return {
-        gl, program, transformUniformLocation,
-        positionAttributeLocation, colorAttributeLocation,
-        positionBuffer, colorBuffer
+        gl, program,
+        viewUnifLoc, invTransUnifLoc, lightDirUnifLoc,
+        positionAttrLoc, colorAttrLoc, normalAttrLoc,
+        positionBuffer, colorBuffer, normalBuffer
     };
 };
 export { setupWebGL };
