@@ -23,11 +23,16 @@ const fragmentShaderSource = `
     varying vec3 v_normal;
     varying vec3 v_surfaceToLight;
     uniform vec3 u_revLightDir;
+    uniform vec3 u_ambientLightColor;
+    uniform vec3 u_dirLightColor;
+    uniform vec3 u_pointLightColor;
     void main() {
         float directionLight = dot(normalize(v_normal), normalize(u_revLightDir));
         float pointLight = dot(normalize(v_normal), normalize(v_surfaceToLight));
         gl_FragColor = vec4(v_color, 1.0);
-        gl_FragColor.rgb *= directionLight * 0.1 + pointLight * 1.0;
+        gl_FragColor.rgb *= u_ambientLightColor +
+                            directionLight * u_dirLightColor +
+                            pointLight * u_pointLightColor;
     }
 `;
 

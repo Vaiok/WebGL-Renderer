@@ -42,6 +42,9 @@ const setupWebGL = (canvas) => {
     const invTransUnifLoc = gl.getUniformLocation(program, 'u_inverseTranspose');
     const lightDirUnifLoc = gl.getUniformLocation(program, 'u_revLightDir');
     const lightPosUnifLoc = gl.getUniformLocation(program, 'u_lightPosition');
+    const ambLightColorUnifLoc = gl.getUniformLocation(program, 'u_ambientLightColor');
+    const dirLightColorUnifLoc = gl.getUniformLocation(program, 'u_dirLightColor');
+    const pointLightColorUnifLoc = gl.getUniformLocation(program, 'u_pointLightColor');
     const positionAttrLoc = gl.getAttribLocation(program, 'a_position');
     const colorAttrLoc = gl.getAttribLocation(program, 'a_color');
     const normalAttrLoc = gl.getAttribLocation(program, 'a_normal');
@@ -65,7 +68,9 @@ const setupWebGL = (canvas) => {
     gl.bufferData(gl.ARRAY_BUFFER, box.getNormals(), gl.STATIC_DRAW);
     return {
         gl, program,
-        worldUnifLoc, viewUnifLoc, invTransUnifLoc, lightDirUnifLoc, lightPosUnifLoc,
+        worldUnifLoc, viewUnifLoc, invTransUnifLoc,
+        lightDirUnifLoc, lightPosUnifLoc,
+        ambLightColorUnifLoc, dirLightColorUnifLoc, pointLightColorUnifLoc,
         positionAttrLoc, colorAttrLoc, normalAttrLoc,
         positionBuffer, colorBuffer, normalBuffer
     };

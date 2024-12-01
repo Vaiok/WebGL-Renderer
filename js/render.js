@@ -1,6 +1,6 @@
 import { Mat4 } from "./matrixMath.js";
 const renderWebGL = (glData, rotation) => {
-    const { gl, program, worldUnifLoc, viewUnifLoc, invTransUnifLoc, lightDirUnifLoc, lightPosUnifLoc, positionAttrLoc, colorAttrLoc, normalAttrLoc, positionBuffer, colorBuffer, normalBuffer } = glData;
+    const { gl, program, worldUnifLoc, viewUnifLoc, invTransUnifLoc, lightDirUnifLoc, lightPosUnifLoc, ambLightColorUnifLoc, dirLightColorUnifLoc, pointLightColorUnifLoc, positionAttrLoc, colorAttrLoc, normalAttrLoc, positionBuffer, colorBuffer, normalBuffer } = glData;
     if (!positionBuffer) {
         throw new Error('Position buffer is null');
     }
@@ -22,6 +22,15 @@ const renderWebGL = (glData, rotation) => {
     if (!lightPosUnifLoc) {
         throw new Error('Light position uniform location is null');
     }
+    if (!ambLightColorUnifLoc) {
+        throw new Error('Ambient light color uniform location is null');
+    }
+    if (!dirLightColorUnifLoc) {
+        throw new Error('Light color uniform location is null');
+    }
+    if (!pointLightColorUnifLoc) {
+        throw new Error('Point light color uniform location is null');
+    }
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
     rotation[0] += 0.002;
@@ -41,8 +50,11 @@ const renderWebGL = (glData, rotation) => {
     gl.uniformMatrix4fv(worldUnifLoc, false, world);
     gl.uniformMatrix4fv(viewUnifLoc, false, camera);
     gl.uniformMatrix4fv(invTransUnifLoc, false, Mat4.transpose(Mat4.inverse(world)));
-    gl.uniform3fv(lightDirUnifLoc, [0, 0, -1]);
-    gl.uniform3fv(lightPosUnifLoc, [0, 0, -bigger / 16]);
+    gl.uniform3fv(lightDirUnifLoc, [0, 1, 0]);
+    gl.uniform3fv(lightPosUnifLoc, [0, 0, -bigger / 8]);
+    gl.uniform3fv(ambLightColorUnifLoc, [0.2, 0.2, 0.2]);
+    gl.uniform3fv(dirLightColorUnifLoc, [0.8, 0.5, 0.2]);
+    gl.uniform3fv(pointLightColorUnifLoc, [0.6, 0.7, 0.8]);
     gl.enableVertexAttribArray(positionAttrLoc);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.vertexAttribPointer(positionAttrLoc, 3, gl.FLOAT, false, 0, 0);
