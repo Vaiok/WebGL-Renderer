@@ -37,13 +37,15 @@ const setupWebGL = (canvas) => {
     const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
     const program = createProgram(gl, vertexShader, fragmentShader);
+    const worldUnifLoc = gl.getUniformLocation(program, 'u_world');
     const viewUnifLoc = gl.getUniformLocation(program, 'u_view');
     const invTransUnifLoc = gl.getUniformLocation(program, 'u_inverseTranspose');
     const lightDirUnifLoc = gl.getUniformLocation(program, 'u_revLightDir');
+    const lightPosUnifLoc = gl.getUniformLocation(program, 'u_lightPosition');
     const positionAttrLoc = gl.getAttribLocation(program, 'a_position');
     const colorAttrLoc = gl.getAttribLocation(program, 'a_color');
     const normalAttrLoc = gl.getAttribLocation(program, 'a_normal');
-    const rectangle = new Cube(0, 0, 0, 100, 100, 100, [
+    const box = new Cube(0, 0, 0, 100, 100, 100, [
         [0, 255, 255], [255, 0, 0],
         [255, 0, 255], [0, 255, 0],
         [255, 255, 0], [0, 0, 255],
@@ -54,16 +56,16 @@ const setupWebGL = (canvas) => {
     ]);
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, rectangle.getPositions(), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, box.getPositions(), gl.STATIC_DRAW);
     const colorBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, rectangle.getColors(), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, box.getColors(), gl.STATIC_DRAW);
     const normalBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, rectangle.getNormals(), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, box.getNormals(), gl.STATIC_DRAW);
     return {
         gl, program,
-        viewUnifLoc, invTransUnifLoc, lightDirUnifLoc,
+        worldUnifLoc, viewUnifLoc, invTransUnifLoc, lightDirUnifLoc, lightPosUnifLoc,
         positionAttrLoc, colorAttrLoc, normalAttrLoc,
         positionBuffer, colorBuffer, normalBuffer
     };
