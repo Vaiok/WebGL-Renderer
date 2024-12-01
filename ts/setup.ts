@@ -8,10 +8,14 @@ interface WebGLData {
     viewUnifLoc: WebGLUniformLocation | null,
     invTransUnifLoc: WebGLUniformLocation | null,
     lightDirUnifLoc: WebGLUniformLocation | null,
-    lightPosUnifLoc: WebGLUniformLocation | null,
+    spotLightDirUnifLoc: WebGLUniformLocation | null,
+    pointLightPosUnifLoc: WebGLUniformLocation | null,
+    spotLightPosUnifLoc: WebGLUniformLocation | null,
     ambLightColorUnifLoc: WebGLUniformLocation | null,
     dirLightColorUnifLoc: WebGLUniformLocation | null,
     pointLightColorUnifLoc: WebGLUniformLocation | null,
+    spotLightColorUnifLoc: WebGLUniformLocation | null,
+    spotLightSizeUnifLoc: WebGLUniformLocation | null,
     positionAttrLoc: number,
     colorAttrLoc: number,
     normalAttrLoc: number,
@@ -61,10 +65,14 @@ const setupWebGL = (canvas: HTMLCanvasElement): WebGLData => {
     const viewUnifLoc = gl.getUniformLocation(program, 'u_view');
     const invTransUnifLoc = gl.getUniformLocation(program, 'u_inverseTranspose');
     const lightDirUnifLoc = gl.getUniformLocation(program, 'u_revLightDir');
-    const lightPosUnifLoc = gl.getUniformLocation(program, 'u_lightPosition');
+    const spotLightDirUnifLoc = gl.getUniformLocation(program, 'u_spotLightDir');
+    const pointLightPosUnifLoc = gl.getUniformLocation(program, 'u_pointLightPosition');
+    const spotLightPosUnifLoc = gl.getUniformLocation(program, 'u_spotLightPosition');
     const ambLightColorUnifLoc = gl.getUniformLocation(program, 'u_ambientLightColor');
     const dirLightColorUnifLoc = gl.getUniformLocation(program, 'u_dirLightColor');
     const pointLightColorUnifLoc = gl.getUniformLocation(program, 'u_pointLightColor');
+    const spotLightColorUnifLoc = gl.getUniformLocation(program, 'u_spotLightColor');
+    const spotLightSizeUnifLoc = gl.getUniformLocation(program, 'u_spotLightSize');
     const positionAttrLoc = gl.getAttribLocation(program, 'a_position');
     const colorAttrLoc = gl.getAttribLocation(program, 'a_color');
     const normalAttrLoc = gl.getAttribLocation(program, 'a_normal');
@@ -93,8 +101,10 @@ const setupWebGL = (canvas: HTMLCanvasElement): WebGLData => {
     return {
         gl, program,
         worldUnifLoc, viewUnifLoc, invTransUnifLoc,
-        lightDirUnifLoc, lightPosUnifLoc,
-        ambLightColorUnifLoc, dirLightColorUnifLoc, pointLightColorUnifLoc,
+        lightDirUnifLoc, spotLightDirUnifLoc,
+        pointLightPosUnifLoc, spotLightPosUnifLoc,
+        ambLightColorUnifLoc, dirLightColorUnifLoc,
+        pointLightColorUnifLoc, spotLightColorUnifLoc, spotLightSizeUnifLoc,
         positionAttrLoc, colorAttrLoc, normalAttrLoc,
         positionBuffer, colorBuffer, normalBuffer
     };

@@ -5,15 +5,18 @@ const vertexShaderSource = `
     uniform mat4 u_world;
     uniform mat4 u_view;
     uniform mat4 u_inverseTranspose;
-    uniform vec3 u_lightPosition;
+    uniform vec3 u_pointLightPosition;
+    uniform vec3 u_spotLightPosition;
     varying vec3 v_color;
     varying vec3 v_normal;
-    varying vec3 v_surfaceToLight;
+    varying vec3 v_surfaceToPointLight;
+    varying vec3 v_surfaceToSpotLight;
     void main() {
         v_color = a_color;
         v_normal = (u_inverseTranspose * vec4(a_normal, 0.0)).xyz;
         vec3 surfacePosition = (u_world * vec4(a_position, 1.0)).xyz;
-        v_surfaceToLight = u_lightPosition - surfacePosition;
+        v_surfaceToPointLight = u_pointLightPosition - surfacePosition;
+        v_surfaceToSpotLight = u_spotLightPosition - surfacePosition;
         gl_Position = u_view * vec4(a_position, 1.0);
     }
 `;
@@ -21,18 +24,27 @@ const fragmentShaderSource = `
     precision mediump float;
     varying vec3 v_color;
     varying vec3 v_normal;
-    varying vec3 v_surfaceToLight;
+    varying vec3 v_surfaceToPointLight;
+    varying vec3 v_surfaceToSpotLight;
     uniform vec3 u_revLightDir;
+    uniform vec3 u_spotLightDir;
     uniform vec3 u_ambientLightColor;
     uniform vec3 u_dirLightColor;
     uniform vec3 u_pointLightColor;
+    uniform vec3 u_spotLightColor;
+    uniform float u_spotLightSize;
     void main() {
-        float directionLight = dot(normalize(v_normal), normalize(u_revLightDir));
-        float pointLight = dot(normalize(v_normal), normalize(v_surfaceToLight));
+        vec3 normal = normalize(v_normal);
+        vec3 surfaceToSpotLight = normalize(v_surfaceToSpotLight);
+        float directionLight = dot(normal, normalize(u_revLightDir));
+        float pointLight = dot(normal, normalize(v_surfaceToPointLight));
+        float spotAngle = dot(surfaceToSpotLight, normalize(-u_spotLightDir));
+        float spotLight = (spotAngle > u_spotLightSize) ? dot(normal, surfaceToSpotLight) : 0.0;
         gl_FragColor = vec4(v_color, 1.0);
         gl_FragColor.rgb *= u_ambientLightColor +
                             directionLight * u_dirLightColor +
-                            pointLight * u_pointLightColor;
+                            pointLight * u_pointLightColor +
+                            spotLight * u_spotLightColor;
     }
 `;
 

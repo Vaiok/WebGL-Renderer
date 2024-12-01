@@ -1,6 +1,6 @@
 import { Mat4 } from "./matrixMath.js";
 const renderWebGL = (glData, rotation) => {
-    const { gl, program, worldUnifLoc, viewUnifLoc, invTransUnifLoc, lightDirUnifLoc, lightPosUnifLoc, ambLightColorUnifLoc, dirLightColorUnifLoc, pointLightColorUnifLoc, positionAttrLoc, colorAttrLoc, normalAttrLoc, positionBuffer, colorBuffer, normalBuffer } = glData;
+    const { gl, program, worldUnifLoc, viewUnifLoc, invTransUnifLoc, lightDirUnifLoc, spotLightDirUnifLoc, pointLightPosUnifLoc, spotLightPosUnifLoc, ambLightColorUnifLoc, dirLightColorUnifLoc, pointLightColorUnifLoc, spotLightColorUnifLoc, spotLightSizeUnifLoc, positionAttrLoc, colorAttrLoc, normalAttrLoc, positionBuffer, colorBuffer, normalBuffer } = glData;
     if (!positionBuffer) {
         throw new Error('Position buffer is null');
     }
@@ -19,8 +19,14 @@ const renderWebGL = (glData, rotation) => {
     if (!lightDirUnifLoc) {
         throw new Error('Light direction uniform location is null');
     }
-    if (!lightPosUnifLoc) {
+    if (!spotLightDirUnifLoc) {
+        throw new Error('Spot light direction uniform location is null');
+    }
+    if (!pointLightPosUnifLoc) {
         throw new Error('Light position uniform location is null');
+    }
+    if (!spotLightPosUnifLoc) {
+        throw new Error('Spot light position uniform location is null');
     }
     if (!ambLightColorUnifLoc) {
         throw new Error('Ambient light color uniform location is null');
@@ -30,6 +36,12 @@ const renderWebGL = (glData, rotation) => {
     }
     if (!pointLightColorUnifLoc) {
         throw new Error('Point light color uniform location is null');
+    }
+    if (!spotLightColorUnifLoc) {
+        throw new Error('Spot light color uniform location is null');
+    }
+    if (!spotLightSizeUnifLoc) {
+        throw new Error('Spot light size uniform location is null');
     }
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
@@ -51,10 +63,14 @@ const renderWebGL = (glData, rotation) => {
     gl.uniformMatrix4fv(viewUnifLoc, false, camera);
     gl.uniformMatrix4fv(invTransUnifLoc, false, Mat4.transpose(Mat4.inverse(world)));
     gl.uniform3fv(lightDirUnifLoc, [0, 1, 0]);
-    gl.uniform3fv(lightPosUnifLoc, [0, 0, -bigger / 8]);
+    gl.uniform3fv(spotLightDirUnifLoc, [0, 0, 1]);
+    gl.uniform3fv(pointLightPosUnifLoc, [0, bigger / 8, -bigger / 8]);
+    gl.uniform3fv(spotLightPosUnifLoc, [0, 0, -bigger / 8]);
     gl.uniform3fv(ambLightColorUnifLoc, [0.2, 0.2, 0.2]);
-    gl.uniform3fv(dirLightColorUnifLoc, [0.8, 0.5, 0.2]);
-    gl.uniform3fv(pointLightColorUnifLoc, [0.6, 0.7, 0.8]);
+    gl.uniform3fv(dirLightColorUnifLoc, [0.6, 0.4, 0.2]);
+    gl.uniform3fv(pointLightColorUnifLoc, [0.4, 0.5, 0.6]);
+    gl.uniform3fv(spotLightColorUnifLoc, [1.0, 1.0, 1.0]);
+    gl.uniform1f(spotLightSizeUnifLoc, 0.9);
     gl.enableVertexAttribArray(positionAttrLoc);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.vertexAttribPointer(positionAttrLoc, 3, gl.FLOAT, false, 0, 0);
