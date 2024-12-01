@@ -15,7 +15,8 @@ interface WebGLData {
     dirLightColorUnifLoc: WebGLUniformLocation | null,
     pointLightColorUnifLoc: WebGLUniformLocation | null,
     spotLightColorUnifLoc: WebGLUniformLocation | null,
-    spotLightSizeUnifLoc: WebGLUniformLocation | null,
+    spotOuterSizeUnifLoc: WebGLUniformLocation | null,
+    spotInnerSizeUnifLoc: WebGLUniformLocation | null,
     positionAttrLoc: number,
     colorAttrLoc: number,
     normalAttrLoc: number,
@@ -72,7 +73,8 @@ const setupWebGL = (canvas: HTMLCanvasElement): WebGLData => {
     const dirLightColorUnifLoc = gl.getUniformLocation(program, 'u_dirLightColor');
     const pointLightColorUnifLoc = gl.getUniformLocation(program, 'u_pointLightColor');
     const spotLightColorUnifLoc = gl.getUniformLocation(program, 'u_spotLightColor');
-    const spotLightSizeUnifLoc = gl.getUniformLocation(program, 'u_spotLightSize');
+    const spotOuterSizeUnifLoc = gl.getUniformLocation(program, 'u_spotOuterSize');
+    const spotInnerSizeUnifLoc = gl.getUniformLocation(program, 'u_spotInnerSize');
     const positionAttrLoc = gl.getAttribLocation(program, 'a_position');
     const colorAttrLoc = gl.getAttribLocation(program, 'a_color');
     const normalAttrLoc = gl.getAttribLocation(program, 'a_normal');
@@ -104,7 +106,8 @@ const setupWebGL = (canvas: HTMLCanvasElement): WebGLData => {
         lightDirUnifLoc, spotLightDirUnifLoc,
         pointLightPosUnifLoc, spotLightPosUnifLoc,
         ambLightColorUnifLoc, dirLightColorUnifLoc,
-        pointLightColorUnifLoc, spotLightColorUnifLoc, spotLightSizeUnifLoc,
+        pointLightColorUnifLoc, spotLightColorUnifLoc,
+        spotOuterSizeUnifLoc, spotInnerSizeUnifLoc,
         positionAttrLoc, colorAttrLoc, normalAttrLoc,
         positionBuffer, colorBuffer, normalBuffer
     };

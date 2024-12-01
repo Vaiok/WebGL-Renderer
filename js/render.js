@@ -1,6 +1,6 @@
 import { Mat4 } from "./matrixMath.js";
 const renderWebGL = (glData, rotation) => {
-    const { gl, program, worldUnifLoc, viewUnifLoc, invTransUnifLoc, lightDirUnifLoc, spotLightDirUnifLoc, pointLightPosUnifLoc, spotLightPosUnifLoc, ambLightColorUnifLoc, dirLightColorUnifLoc, pointLightColorUnifLoc, spotLightColorUnifLoc, spotLightSizeUnifLoc, positionAttrLoc, colorAttrLoc, normalAttrLoc, positionBuffer, colorBuffer, normalBuffer } = glData;
+    const { gl, program, worldUnifLoc, viewUnifLoc, invTransUnifLoc, lightDirUnifLoc, spotLightDirUnifLoc, pointLightPosUnifLoc, spotLightPosUnifLoc, ambLightColorUnifLoc, dirLightColorUnifLoc, pointLightColorUnifLoc, spotLightColorUnifLoc, spotOuterSizeUnifLoc, spotInnerSizeUnifLoc, positionAttrLoc, colorAttrLoc, normalAttrLoc, positionBuffer, colorBuffer, normalBuffer } = glData;
     if (!positionBuffer) {
         throw new Error('Position buffer is null');
     }
@@ -40,15 +40,18 @@ const renderWebGL = (glData, rotation) => {
     if (!spotLightColorUnifLoc) {
         throw new Error('Spot light color uniform location is null');
     }
-    if (!spotLightSizeUnifLoc) {
+    if (!spotOuterSizeUnifLoc) {
         throw new Error('Spot light size uniform location is null');
+    }
+    if (!spotInnerSizeUnifLoc) {
+        throw new Error('Spot light transition size uniform location is null');
     }
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
     rotation[0] += 0.002;
     const bigger = Math.max(gl.canvas.width, gl.canvas.height);
     const view = Mat4.perspective(Math.PI / 4, 1, bigger * 5);
-    let camera = Mat4.lookAt([0, 0, -bigger / 2], [0, 0, 0], [0, 1, 0]);
+    let camera = Mat4.lookAt([0, 0, -bigger / 3], [0, 0, 0], [0, 1, 0]);
     camera = Mat4.inverse(camera);
     let world = Mat4.identity();
     world = Mat4.multMat(world, Mat4.rotateY(rotation[0] * 5));
@@ -56,6 +59,11 @@ const renderWebGL = (glData, rotation) => {
     world = Mat4.multMat(world, Mat4.rotateZ(rotation[0] * 6));
     camera = Mat4.multMat(camera, world);
     camera = Mat4.multMat(view, camera);
+    const outerSpotSize = 0.7;
+    const innerSpotSize = 0.9;
+    if (innerSpotSize <= outerSpotSize) {
+        throw new Error('Spot light inner size must be greater than outer size');
+    }
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.useProgram(program);
@@ -65,12 +73,13 @@ const renderWebGL = (glData, rotation) => {
     gl.uniform3fv(lightDirUnifLoc, [0, 1, 0]);
     gl.uniform3fv(spotLightDirUnifLoc, [0, 0, 1]);
     gl.uniform3fv(pointLightPosUnifLoc, [0, bigger / 8, -bigger / 8]);
-    gl.uniform3fv(spotLightPosUnifLoc, [0, 0, -bigger / 8]);
+    gl.uniform3fv(spotLightPosUnifLoc, [0, 0, -bigger / 12]);
     gl.uniform3fv(ambLightColorUnifLoc, [0.2, 0.2, 0.2]);
     gl.uniform3fv(dirLightColorUnifLoc, [0.6, 0.4, 0.2]);
     gl.uniform3fv(pointLightColorUnifLoc, [0.4, 0.5, 0.6]);
     gl.uniform3fv(spotLightColorUnifLoc, [1.0, 1.0, 1.0]);
-    gl.uniform1f(spotLightSizeUnifLoc, 0.9);
+    gl.uniform1f(spotOuterSizeUnifLoc, outerSpotSize);
+    gl.uniform1f(spotInnerSizeUnifLoc, innerSpotSize);
     gl.enableVertexAttribArray(positionAttrLoc);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.vertexAttribPointer(positionAttrLoc, 3, gl.FLOAT, false, 0, 0);
