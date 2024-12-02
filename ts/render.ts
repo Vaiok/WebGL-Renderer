@@ -10,6 +10,21 @@ const renderWebGL = (glData: WebGLData, fullscreen: boolean, rotation: number[])
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.useProgram(programInfo.program);
+    for (const attribute of programInfo.attributes) {
+        if (attribute.location === null) { throw new Error(`${attribute.name} attribute location is null`); }
+        if (attribute.buffer === null) { throw new Error(`${attribute.name} buffer is null`); }
+        gl.enableVertexAttribArray(attribute.location);
+        gl.bindBuffer(gl.ARRAY_BUFFER, attribute.buffer);
+        const normalized = attribute.type === 'UNSIGNED_BYTE';
+        gl.vertexAttribPointer(attribute.location, attribute.size, gl[attribute.type], normalized, 0, 0);
+    }
+    programInfo.uniforms[5].data = [0, viewSize/8, -viewSize/8];
+    programInfo.uniforms[6].data = [0, 0, -viewSize/12];
+    programInfo.uniforms[11].data = 0.7;
+    programInfo.uniforms[12].data = 0.9;
+    if (programInfo.uniforms[12].data <= programInfo.uniforms[11].data) {
+        throw new Error('Spot light inner size must be greater than outer size');
+    }
     const view = Mat4.perspective(Math.PI / 4, 1, viewSize * 5);
     for (let offset = -1; offset <= 1; offset += 1) {
         let camera = Mat4.lookAt([0, 0, -viewSize], [0, 0, 0], [0, 1, 0]);
@@ -24,22 +39,6 @@ const renderWebGL = (glData: WebGLData, fullscreen: boolean, rotation: number[])
         programInfo.uniforms[0].data = world;
         programInfo.uniforms[1].data = camera;
         programInfo.uniforms[2].data = Mat4.transpose(Mat4.inverse(world));
-        programInfo.uniforms[5].data = [0, viewSize/8, -viewSize/8];
-        programInfo.uniforms[6].data = [0, 0, -viewSize/12];
-        programInfo.uniforms[11].data = 0.7;
-        programInfo.uniforms[12].data = 0.9;
-        if (programInfo.uniforms[12].data <= programInfo.uniforms[11].data) {
-            throw new Error('Spot light inner size must be greater than outer size');
-        }
-        
-        for (const attribute of programInfo.attributes) {
-            if (attribute.location === null) { throw new Error(`${attribute.name} attribute location is null`); }
-            if (attribute.buffer === null) { throw new Error(`${attribute.name} buffer is null`); }
-            gl.enableVertexAttribArray(attribute.location);
-            gl.bindBuffer(gl.ARRAY_BUFFER, attribute.buffer);
-            const normalized = attribute.type === 'UNSIGNED_BYTE';
-            gl.vertexAttribPointer(attribute.location, attribute.size, gl[attribute.type], normalized, 0, 0);
-        }
         for (const uniform of programInfo.uniforms) {
             if (uniform.location === null) { throw new Error(`${uniform.name} uniform location is null`); }
             if (uniform.type === 'Matrix4fv') {
