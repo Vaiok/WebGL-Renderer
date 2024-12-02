@@ -1,18 +1,29 @@
-const createCanvas = (): HTMLCanvasElement => {
-    const canvas = document.createElement('canvas');
-    document.body.appendChild(canvas);
-    return canvas;
-};
-const resizeCanvas = (canvas: HTMLCanvasElement, gl: WebGLRenderingContext): void => {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-    const bigger = Math.max(canvas.width, canvas.height);
-    const diff = Math.abs(canvas.width - canvas.height) / 2;
-    let viewX = 0;
-    let viewY = 0;
-    if (canvas.width > canvas.height) { viewY -= diff; }
-    else if (canvas.width < canvas.height) { viewX -= diff; }
-    gl.viewport(viewX, viewY, bigger, bigger);
-};
+class Canvas {
+    private canvas: HTMLCanvasElement;
+    constructor(private fullscreen: boolean = true) {
+        this.canvas = document.createElement('canvas');
+        document.body.appendChild(this.canvas);
+    }
+    public getCanvas(): HTMLCanvasElement { return this.canvas }
+    public isFullscreen(): boolean { return this.fullscreen }
+    public resizeCanvas(gl: WebGLRenderingContext): void {
+        this.canvas.width = this.canvas.clientWidth;
+        this.canvas.height = this.canvas.clientHeight;
+        const cw = this.canvas.width;
+        const ch = this.canvas.height;
+        const diff = Math.abs(cw - ch) / 2;
+        let viewX = 0;
+        let viewY = 0;
+        const viewSize = (this.fullscreen) ? Math.max(cw, ch) : Math.min(cw, ch);
+        if (this.fullscreen) {
+            if (cw > ch) { viewY -= diff; }
+            else if (cw < ch) { viewX -= diff; }
+        } else {
+            if (cw > ch) { viewX += diff; }
+            else if (cw < ch) { viewY += diff; }
+        }
+        gl.viewport(viewX, viewY, viewSize, viewSize);
+    }
+}
 
-export { createCanvas, resizeCanvas };
+export { Canvas };

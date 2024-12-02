@@ -37,22 +37,6 @@ const setupWebGL = (canvas) => {
     const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
     const program = createProgram(gl, vertexShader, fragmentShader);
-    const worldUnifLoc = gl.getUniformLocation(program, 'u_world');
-    const viewUnifLoc = gl.getUniformLocation(program, 'u_view');
-    const invTransUnifLoc = gl.getUniformLocation(program, 'u_inverseTranspose');
-    const lightDirUnifLoc = gl.getUniformLocation(program, 'u_revLightDir');
-    const spotLightDirUnifLoc = gl.getUniformLocation(program, 'u_spotLightDir');
-    const pointLightPosUnifLoc = gl.getUniformLocation(program, 'u_pointLightPosition');
-    const spotLightPosUnifLoc = gl.getUniformLocation(program, 'u_spotLightPosition');
-    const ambLightColorUnifLoc = gl.getUniformLocation(program, 'u_ambientLightColor');
-    const dirLightColorUnifLoc = gl.getUniformLocation(program, 'u_dirLightColor');
-    const pointLightColorUnifLoc = gl.getUniformLocation(program, 'u_pointLightColor');
-    const spotLightColorUnifLoc = gl.getUniformLocation(program, 'u_spotLightColor');
-    const spotOuterSizeUnifLoc = gl.getUniformLocation(program, 'u_spotOuterSize');
-    const spotInnerSizeUnifLoc = gl.getUniformLocation(program, 'u_spotInnerSize');
-    const positionAttrLoc = gl.getAttribLocation(program, 'a_position');
-    const colorAttrLoc = gl.getAttribLocation(program, 'a_color');
-    const normalAttrLoc = gl.getAttribLocation(program, 'a_normal');
     const box = new Cube(0, 0, 0, 100, 100, 100, [
         [0, 255, 255], [255, 0, 0],
         [255, 0, 255], [0, 255, 0],
@@ -62,25 +46,40 @@ const setupWebGL = (canvas) => {
         [0, -1, 0], [0, 1, 0],
         [-1, 0, 0], [1, 0, 0]
     ]);
-    const positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, box.getPositions(), gl.STATIC_DRAW);
-    const colorBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, box.getColors(), gl.STATIC_DRAW);
-    const normalBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, box.getNormals(), gl.STATIC_DRAW);
-    return {
-        gl, program,
-        worldUnifLoc, viewUnifLoc, invTransUnifLoc,
-        lightDirUnifLoc, spotLightDirUnifLoc,
-        pointLightPosUnifLoc, spotLightPosUnifLoc,
-        ambLightColorUnifLoc, dirLightColorUnifLoc,
-        pointLightColorUnifLoc, spotLightColorUnifLoc,
-        spotOuterSizeUnifLoc, spotInnerSizeUnifLoc,
-        positionAttrLoc, colorAttrLoc, normalAttrLoc,
-        positionBuffer, colorBuffer, normalBuffer
+    const programInfo = {
+        program,
+        attributes: [
+            { name: 'a_position', location: null, buffer: null, size: 3, type: 'FLOAT' },
+            { name: 'a_color', location: null, buffer: null, size: 3, type: 'UNSIGNED_BYTE' },
+            { name: 'a_normal', location: null, buffer: null, size: 3, type: 'FLOAT' }
+        ],
+        uniforms: [
+            { name: 'u_world', location: null, data: null, type: 'Matrix4fv' },
+            { name: 'u_view', location: null, data: null, type: 'Matrix4fv' },
+            { name: 'u_inverseTranspose', location: null, data: null, type: 'Matrix4fv' },
+            { name: 'u_revLightDir', location: null, data: [0, 1, 0], type: '3fv' },
+            { name: 'u_spotLightDir', location: null, data: [0, 0, 1], type: '3fv' },
+            { name: 'u_pointLightPosition', location: null, data: null, type: '3fv' },
+            { name: 'u_spotLightPosition', location: null, data: null, type: '3fv' },
+            { name: 'u_ambientLightColor', location: null, data: [0.2, 0.2, 0.2], type: '3fv' },
+            { name: 'u_dirLightColor', location: null, data: [0.6, 0.4, 0.2], type: '3fv' },
+            { name: 'u_pointLightColor', location: null, data: [0.4, 0.5, 0.6], type: '3fv' },
+            { name: 'u_spotLightColor', location: null, data: [1.0, 1.0, 1.0], type: '3fv' },
+            { name: 'u_spotOuterSize', location: null, data: null, type: '1f' },
+            { name: 'u_spotInnerSize', location: null, data: null, type: '1f' }
+        ]
     };
+    for (const attribute of programInfo.attributes) {
+        attribute.location = gl.getAttribLocation(program, attribute.name);
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        const methodName = `get${attribute.name[2].toUpperCase()}${attribute.name.slice(3)}s`;
+        gl.bufferData(gl.ARRAY_BUFFER, box[methodName](), gl.STATIC_DRAW);
+        attribute.buffer = buffer;
+    }
+    for (const uniform of programInfo.uniforms) {
+        uniform.location = gl.getUniformLocation(program, uniform.name);
+    }
+    return { gl, programInfo };
 };
 export { setupWebGL };

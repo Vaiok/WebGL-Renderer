@@ -1,3 +1,5 @@
+type MethodName = 'getPositions' | 'getColors' | 'getNormals';
+
 class Triangle {
     private positions: Float32Array;
     private colors: Uint8Array;
@@ -19,9 +21,9 @@ class Triangle {
 }
 
 class Cube {
-    private positions: Float32Array;
-    private colors: Uint8Array;
-    private normals: Float32Array;
+    public positions: Float32Array;
+    public colors: Uint8Array;
+    public normals: Float32Array;
     constructor(
         x: number, y: number, z: number,
         width: number, height: number, depth: number,
@@ -102,4 +104,4 @@ class Cube {
     public getNormals(): Float32Array { return this.normals }
 }
 
-export { Triangle, Cube };
+export { Triangle, Cube, MethodName };
