@@ -66,6 +66,16 @@ const extractShaderData = (vertShader: string, fragShader: string): ShaderData =
         ...vertShader.matchAll(/uniform\s+(\w+)\s+(\w+)\s*;/g),
         ...fragShader.matchAll(/uniform\s+(\w+)\s+(\w+)\s*;/g)
     ];
+    let duplicates = [];
+    for (let i = 0; i < uniforms.length-1; i++) {
+        for (let j = i+1; j < uniforms.length; j++) {
+            if (uniforms[i][0] === uniforms[j][0]) { duplicates.push(uniforms[j]); }
+        }
+    }
+    for (const duplicate of duplicates) {
+        const index = uniforms.lastIndexOf(duplicate);
+        if (index !== -1) { uniforms.splice(index, 1); }
+    }
     return {attributes, uniforms};
 };
 const setupWebGL = (canvas: HTMLCanvasElement): WebGLData => {
