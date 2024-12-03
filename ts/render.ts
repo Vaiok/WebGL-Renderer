@@ -18,10 +18,16 @@ const renderWebGL = (glData: WebGLData, fullscreen: boolean, rotation: number[])
         const normalized = attribute.type === 'UNSIGNED_BYTE';
         gl.vertexAttribPointer(attribute.location, attribute.size, gl[attribute.type], normalized, 0, 0);
     }
-    programInfo.uniforms[5].data = [0, viewSize/8, -viewSize/8];
-    programInfo.uniforms[6].data = [0, 0, -viewSize/12];
-    programInfo.uniforms[11].data = 0.7;
-    programInfo.uniforms[12].data = 0.9;
+    programInfo.uniforms[3].data = [0, viewSize/8, -viewSize/8]; // Point light position
+    programInfo.uniforms[4].data = [0, 0, -viewSize/12]; // Spot light position
+    programInfo.uniforms[5].data = [0, 1, 0]; // Directional light reverse direction
+    programInfo.uniforms[6].data = [0, 0, 1]; // Spot light direction
+    programInfo.uniforms[7].data = [0.2, 0.2, 0.2]; // Ambient light color
+    programInfo.uniforms[8].data = [0.6, 0.4, 0.2]; // Directional light color
+    programInfo.uniforms[9].data = [0.4, 0.5, 0.6]; // Point light color
+    programInfo.uniforms[10].data = [1.0, 1.0, 1.0]; // Spot light color
+    programInfo.uniforms[11].data = 0.7; // Spot light outer size
+    programInfo.uniforms[12].data = 0.9; // Spot light inner size
     if (programInfo.uniforms[12].data <= programInfo.uniforms[11].data) {
         throw new Error('Spot light inner size must be greater than outer size');
     }

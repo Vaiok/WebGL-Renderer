@@ -29,6 +29,14 @@ const createProgram = (gl, vertexShader, fragmentShader) => {
     }
     return program;
 };
+const extractShaderData = (vertShader, fragShader) => {
+    const attributes = [...vertShader.matchAll(/attribute\s+(\w+)\s+(\w+)\s*;/g)];
+    const uniforms = [
+        ...vertShader.matchAll(/uniform\s+(\w+)\s+(\w+)\s*;/g),
+        ...fragShader.matchAll(/uniform\s+(\w+)\s+(\w+)\s*;/g)
+    ];
+    return { attributes, uniforms };
+};
 const setupWebGL = (canvas) => {
     const gl = canvas.getContext('webgl');
     if (!gl) {
@@ -37,6 +45,7 @@ const setupWebGL = (canvas) => {
     const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
     const program = createProgram(gl, vertexShader, fragmentShader);
+    const shaderData = extractShaderData(vertexShaderSource, fragmentShaderSource);
     const box = new Cube(0, 0, 0, 100, 100, 100, [
         [0, 255, 255], [255, 0, 0],
         [255, 0, 255], [0, 255, 0],
@@ -48,37 +57,25 @@ const setupWebGL = (canvas) => {
     ]);
     const programInfo = {
         program,
-        attributes: [
-            { name: 'a_position', location: null, buffer: null, size: 3, type: 'FLOAT' },
-            { name: 'a_color', location: null, buffer: null, size: 3, type: 'UNSIGNED_BYTE' },
-            { name: 'a_normal', location: null, buffer: null, size: 3, type: 'FLOAT' }
-        ],
-        uniforms: [
-            { name: 'u_world', location: null, data: null, type: 'Matrix4fv' },
-            { name: 'u_view', location: null, data: null, type: 'Matrix4fv' },
-            { name: 'u_inverseTranspose', location: null, data: null, type: 'Matrix4fv' },
-            { name: 'u_revLightDir', location: null, data: [0, 1, 0], type: '3fv' },
-            { name: 'u_spotLightDir', location: null, data: [0, 0, 1], type: '3fv' },
-            { name: 'u_pointLightPosition', location: null, data: null, type: '3fv' },
-            { name: 'u_spotLightPosition', location: null, data: null, type: '3fv' },
-            { name: 'u_ambientLightColor', location: null, data: [0.2, 0.2, 0.2], type: '3fv' },
-            { name: 'u_dirLightColor', location: null, data: [0.6, 0.4, 0.2], type: '3fv' },
-            { name: 'u_pointLightColor', location: null, data: [0.4, 0.5, 0.6], type: '3fv' },
-            { name: 'u_spotLightColor', location: null, data: [1.0, 1.0, 1.0], type: '3fv' },
-            { name: 'u_spotOuterSize', location: null, data: null, type: '1f' },
-            { name: 'u_spotInnerSize', location: null, data: null, type: '1f' }
-        ]
+        attributes: [],
+        uniforms: []
     };
-    for (const attribute of programInfo.attributes) {
-        attribute.location = gl.getAttribLocation(program, attribute.name);
+    for (const attribute of shaderData.attributes) {
+        const name = attribute[2];
+        const location = gl.getAttribLocation(program, name);
         const buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        const methodName = `get${attribute.name[2].toUpperCase()}${attribute.name.slice(3)}s`;
+        const methodName = `get${name[2].toUpperCase()}${name.slice(3)}s`;
         gl.bufferData(gl.ARRAY_BUFFER, box[methodName](), gl.STATIC_DRAW);
-        attribute.buffer = buffer;
+        const size = attribute[1] === 'vec3' ? 3 : 1;
+        const type = name === 'a_color' ? 'UNSIGNED_BYTE' : 'FLOAT';
+        programInfo.attributes.push({ name, location, buffer, size, type });
     }
-    for (const uniform of programInfo.uniforms) {
-        uniform.location = gl.getUniformLocation(program, uniform.name);
+    for (const uniform of shaderData.uniforms) {
+        const name = uniform[2];
+        const location = gl.getUniformLocation(program, name);
+        const type = uniform[1] === 'vec3' ? '3fv' : uniform[1] === 'float' ? '1f' : 'Matrix4fv';
+        programInfo.uniforms.push({ name, location, data: null, type });
     }
     return { gl, programInfo };
 };
