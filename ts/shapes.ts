@@ -1,4 +1,4 @@
-type MethodName = 'getPositions' | 'getColors' | 'getNormals';
+type MethodName = 'getPositions' | 'getTexcoords' | 'getNormals';
 
 class Triangle {
     private positions: Float32Array;
@@ -21,13 +21,13 @@ class Triangle {
 }
 
 class Cube {
-    public positions: Float32Array;
-    public colors: Uint8Array;
-    public normals: Float32Array;
+    private positions: Float32Array;
+    private texcoords: Float32Array;
+    private normals: Float32Array;
     constructor(
         x: number, y: number, z: number,
         width: number, height: number, depth: number,
-        colors: number[][], normals: number[][]
+        texcoords: number[][], normals: number[][]
     ) {
         const w = width/2, h = height/2, d = depth/2;
         const ntl = [x-w, y+h, z-d];
@@ -58,25 +58,25 @@ class Cube {
             ...ntr, ...nbr, ...ftr,
             ...nbr, ...fbr, ...ftr,
         ]);
-        this.colors = new Uint8Array([
+        this.texcoords = new Float32Array([
             // Back face
-            ...colors[0], ...colors[0], ...colors[0],
-            ...colors[0], ...colors[0], ...colors[0],
+            ...texcoords[0], ...texcoords[1], ...texcoords[2],
+            ...texcoords[3], ...texcoords[4], ...texcoords[5],
             // Front face
-            ...colors[1], ...colors[1], ...colors[1],
-            ...colors[1], ...colors[1], ...colors[1],
+            ...texcoords[0], ...texcoords[1], ...texcoords[2],
+            ...texcoords[3], ...texcoords[4], ...texcoords[5],
             // Bottom face
-            ...colors[2], ...colors[2], ...colors[2],
-            ...colors[2], ...colors[2], ...colors[2],
+            ...texcoords[0], ...texcoords[1], ...texcoords[2],
+            ...texcoords[3], ...texcoords[4], ...texcoords[5],
             // Top face
-            ...colors[3], ...colors[3], ...colors[3],
-            ...colors[3], ...colors[3], ...colors[3],
+            ...texcoords[0], ...texcoords[1], ...texcoords[2],
+            ...texcoords[3], ...texcoords[4], ...texcoords[5],
             // Left face
-            ...colors[4], ...colors[4], ...colors[4],
-            ...colors[4], ...colors[4], ...colors[4],
+            ...texcoords[0], ...texcoords[1], ...texcoords[2],
+            ...texcoords[3], ...texcoords[4], ...texcoords[5],
             // Right face
-            ...colors[5], ...colors[5], ...colors[5],
-            ...colors[5], ...colors[5], ...colors[5],
+            ...texcoords[0], ...texcoords[1], ...texcoords[2],
+            ...texcoords[3], ...texcoords[4], ...texcoords[5],
         ]);
         this.normals = new Float32Array([
             // Back face
@@ -100,7 +100,7 @@ class Cube {
         ]);
     }
     public getPositions(): Float32Array { return this.positions }
-    public getColors(): Uint8Array { return this.colors }
+    public getTexcoords(): Float32Array { return this.texcoords }
     public getNormals(): Float32Array { return this.normals }
 }
 

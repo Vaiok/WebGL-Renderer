@@ -16,7 +16,7 @@ class Triangle {
     getColors() { return this.colors; }
 }
 class Cube {
-    constructor(x, y, z, width, height, depth, colors, normals) {
+    constructor(x, y, z, width, height, depth, texcoords, normals) {
         const w = width / 2, h = height / 2, d = depth / 2;
         const ntl = [x - w, y + h, z - d];
         const ntr = [x + w, y + h, z - d];
@@ -40,19 +40,19 @@ class Cube {
             ...ntr, ...nbr, ...ftr,
             ...nbr, ...fbr, ...ftr,
         ]);
-        this.colors = new Uint8Array([
-            ...colors[0], ...colors[0], ...colors[0],
-            ...colors[0], ...colors[0], ...colors[0],
-            ...colors[1], ...colors[1], ...colors[1],
-            ...colors[1], ...colors[1], ...colors[1],
-            ...colors[2], ...colors[2], ...colors[2],
-            ...colors[2], ...colors[2], ...colors[2],
-            ...colors[3], ...colors[3], ...colors[3],
-            ...colors[3], ...colors[3], ...colors[3],
-            ...colors[4], ...colors[4], ...colors[4],
-            ...colors[4], ...colors[4], ...colors[4],
-            ...colors[5], ...colors[5], ...colors[5],
-            ...colors[5], ...colors[5], ...colors[5],
+        this.texcoords = new Float32Array([
+            ...texcoords[0], ...texcoords[1], ...texcoords[2],
+            ...texcoords[3], ...texcoords[4], ...texcoords[5],
+            ...texcoords[0], ...texcoords[1], ...texcoords[2],
+            ...texcoords[3], ...texcoords[4], ...texcoords[5],
+            ...texcoords[0], ...texcoords[1], ...texcoords[2],
+            ...texcoords[3], ...texcoords[4], ...texcoords[5],
+            ...texcoords[0], ...texcoords[1], ...texcoords[2],
+            ...texcoords[3], ...texcoords[4], ...texcoords[5],
+            ...texcoords[0], ...texcoords[1], ...texcoords[2],
+            ...texcoords[3], ...texcoords[4], ...texcoords[5],
+            ...texcoords[0], ...texcoords[1], ...texcoords[2],
+            ...texcoords[3], ...texcoords[4], ...texcoords[5],
         ]);
         this.normals = new Float32Array([
             ...normals[0], ...normals[0], ...normals[0],
@@ -70,7 +70,7 @@ class Cube {
         ]);
     }
     getPositions() { return this.positions; }
-    getColors() { return this.colors; }
+    getTexcoords() { return this.texcoords; }
     getNormals() { return this.normals; }
 }
 export { Triangle, Cube };

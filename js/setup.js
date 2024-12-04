@@ -61,9 +61,8 @@ const setupWebGL = (canvas) => {
     const program = createProgram(gl, vertexShader, fragmentShader);
     const shaderData = extractShaderData(vertexShaderSource, fragmentShaderSource);
     const box = new Cube(0, 0, 0, 100, 100, 100, [
-        [0, 255, 255], [255, 0, 0],
-        [255, 0, 255], [0, 255, 0],
-        [255, 255, 0], [0, 0, 255],
+        [0, 0], [0, 1], [1, 0],
+        [0, 1], [1, 1], [1, 0],
     ], [
         [0, 0, -1], [0, 0, 1],
         [0, -1, 0], [0, 1, 0],
@@ -81,15 +80,24 @@ const setupWebGL = (canvas) => {
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
         const methodName = `get${name[2].toUpperCase()}${name.slice(3)}s`;
         gl.bufferData(gl.ARRAY_BUFFER, box[methodName](), gl.STATIC_DRAW);
-        const size = attribute[1] === 'vec3' ? 3 : 1;
-        const type = name === 'a_color' ? 'UNSIGNED_BYTE' : 'FLOAT';
-        programInfo.attributes.push({ name, location, buffer, size, type });
+        const size = attribute[1] === 'vec3' ? 3 : attribute[1] === 'vec2' ? 2 : 1;
+        programInfo.attributes.push({ name, location, buffer, size, type: 'FLOAT' });
     }
     for (const uniform of shaderData.uniforms) {
         const name = uniform[2];
         const location = gl.getUniformLocation(program, name);
-        const type = uniform[1] === 'vec3' ? '3fv' : uniform[1] === 'float' ? '1f' : 'Matrix4fv';
-        programInfo.uniforms.push({ name, location, data: null, type });
+        programInfo.uniforms.push({ name, location, data: null, type: uniform[1] });
+        if (uniform[1] === 'sampler2D') {
+            const textureData = new Uint8Array([
+                255, 0, 0, 255, 0, 0, 255, 255,
+                0, 255, 0, 255, 255, 255, 0, 255
+            ]);
+            const texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 2, 2, 0, gl.RGBA, gl.UNSIGNED_BYTE, textureData);
+            gl.generateMipmap(gl.TEXTURE_2D);
+            programInfo.uniforms[programInfo.uniforms.length - 1].data = texture;
+        }
     }
     return { gl, programInfo };
 };
